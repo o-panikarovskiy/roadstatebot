@@ -39,6 +39,10 @@ func initStuff(ibot bot.IBot) {
 		return &bot.Message{Text: text}
 	})
 
+	ibot.OnRegexp(regexp.MustCompile(`^ДА!$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
+		return &bot.Message{Text: "ПИЗДА!"}
+	})
+
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^нет$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		text := "пидара ответ"
 

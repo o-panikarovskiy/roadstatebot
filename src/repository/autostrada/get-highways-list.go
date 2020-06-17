@@ -34,7 +34,7 @@ func (s *autostrada) GetHighwaysList(countryCode string, highwayTypeID string) (
 		highway.Name = s.Find("span.hidden-xs a.highwayLabel").Text()
 		highway.Rating = parseHighwayRating(s.Find("span.rateNumber").Text())
 
-		if strings.HasPrefix(highway.ID, highwayTypeID) {
+		if highwayTypeID == "" || strings.HasPrefix(highway.ID, highwayTypeID) {
 			result = append(result, highway)
 		}
 	})

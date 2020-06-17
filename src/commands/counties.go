@@ -19,7 +19,7 @@ func CountriesList(rep repository.IRepository) bot.Handler {
 			row := []bot.InlineKeyboardButton{
 				{
 					Text:         country.Name,
-					CallbackData: "/list:" + country.Code,
+					CallbackData: "/highways:" + country.Code + "|0|50",
 				},
 			}
 
@@ -28,36 +28,6 @@ func CountriesList(rep repository.IRepository) bot.Handler {
 
 		return &bot.Message{
 			Text: "Выберите страну:",
-			ReplyMarkup: &bot.InlineKeyboardMarkup{
-				InlineKeyboard: rows,
-			},
-		}
-	}
-}
-
-// CountiesListAnswer command
-func CountiesListAnswer(rep repository.IRepository) bot.AnswerHandler {
-	return func(countryCode string) *bot.Message {
-		list, err := rep.GetHighWayTypesList(countryCode)
-
-		if err != nil {
-			return &bot.Message{Text: err.Error()}
-		}
-
-		var rows [][]bot.InlineKeyboardButton
-		for _, hwType := range list {
-			row := []bot.InlineKeyboardButton{
-				{
-					Text:         hwType.Name,
-					CallbackData: "/highways:" + countryCode + "|" + hwType.ID + "|0|50",
-				},
-			}
-
-			rows = append(rows, row)
-		}
-
-		return &bot.Message{
-			Text: "Выберите тип трассы:",
 			ReplyMarkup: &bot.InlineKeyboardMarkup{
 				InlineKeyboard: rows,
 			},

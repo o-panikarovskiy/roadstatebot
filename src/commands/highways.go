@@ -8,48 +8,49 @@ import (
 	"strings"
 )
 
+const pageSize uint64 = 50
+
 // HighwayListAnswer command
 func HighwayListAnswer(rep repository.IRepository) bot.AnswerHandler {
 	return func(answer string) *bot.Message {
 		arr := strings.Split(answer, "|")
 		countryCode := arr[0]
-		highwayTypeID := arr[1]
-		step := uint64(50)
 
-		indexFrom, err := strconv.ParseUint(arr[2], 10, 32)
+		indexFrom, err := strconv.ParseUint(arr[1], 10, 32)
 		if err != nil {
 			return nil
 		}
 
-		indexTo, err := strconv.ParseUint(arr[3], 10, 32)
+		indexTo, err := strconv.ParseUint(arr[2], 10, 32)
 		if err != nil {
 			return nil
 		}
 
-		list, err := rep.GetHighwaysList(countryCode, highwayTypeID)
-		ulen := uint64(len(list))
-		if err != nil || ulen == 0 {
+		list, err := rep.GetHighwaysList(countryCode, "")
+		length := uint64(len(list))
+		if err != nil || length <= indexFrom {
 			return nil
 		}
 
-		if indexTo >= ulen {
-			indexTo = ulen - 1
-		}
+		indexTo = min(indexTo, length)
 
 		res := ""
 		for _, highway := range list[indexFrom:indexTo] {
 			res += fmt.Sprintf("/%s%s\t%s\t%.1f\n", countryCode, strings.ToLower(strings.Replace(highway.ID, "-", "", 1)), highway.Name, highway.Rating)
 		}
 
+		indexFrom = indexTo
+		indexTo = min(length, indexTo+pageSize)
+
 		return &bot.Message{
 			Text:        res,
-			ReplyMarkup: formatHighwayListReplyMarkup(ulen, indexFrom+step, indexTo+step, countryCode, highwayTypeID),
+			ReplyMarkup: formatHighwayListReplyMarkup(length, indexFrom, indexTo, countryCode),
 		}
 	}
 }
 
-func formatHighwayListReplyMarkup(maxLen uint64, indexFrom uint64, indexTo uint64, countryCode string, highwayTypeID string) *bot.InlineKeyboardMarkup {
-	if maxLen <= indexFrom || indexTo >= maxLen {
+func formatHighwayListReplyMarkup(length uint64, indexFrom uint64, indexTo uint64, countryCode string) *bot.InlineKeyboardMarkup {
+	if length <= indexFrom {
 		return nil
 	}
 
@@ -58,7 +59,7 @@ func formatHighwayListReplyMarkup(maxLen uint64, indexFrom uint64, indexTo uint6
 			{
 				{
 					Text:         "Показать еще",
-					CallbackData: "/highways:" + countryCode + "|" + highwayTypeID + "|" + fmt.Sprint(indexFrom) + "|" + fmt.Sprint(indexTo),
+					CallbackData: "/highways:" + countryCode + "|" + fmt.Sprint(indexFrom) + "|" + fmt.Sprint(indexTo),
 				},
 			},
 		},

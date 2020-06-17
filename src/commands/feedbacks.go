@@ -34,29 +34,30 @@ func FeedbackAnswer(rep repository.IRepository) bot.AnswerHandler {
 		arr := strings.Split(data, "|")
 		countryCode := arr[0]
 		highwayID := arr[1]
-		indexStr := arr[2]
-		index, err := strconv.ParseUint(indexStr, 10, 32)
+
+		index, err := strconv.ParseUint(arr[2], 10, 32)
 		if err != nil {
 			return nil
 		}
 
 		list, err := rep.GetFeedbacksList(countryCode, highwayID)
-		ulen := uint64(len(list))
-		if err != nil || ulen <= index {
+		length := uint64(len(list))
+		if err != nil || length <= index {
 			return nil
 		}
 
 		res := formatFeedback(&list[index])
+		index = min(length, index+1)
 
 		return &bot.Message{
 			Text:        res,
-			ReplyMarkup: formatFeedbackReplyMarkup(ulen, index+1, countryCode, highwayID),
+			ReplyMarkup: formatFeedbackReplyMarkup(length, index, countryCode, highwayID),
 		}
 	}
 }
 
-func formatFeedbackReplyMarkup(maxLen uint64, nextIndex uint64, countryCode string, highwayID string) *bot.InlineKeyboardMarkup {
-	if maxLen <= nextIndex {
+func formatFeedbackReplyMarkup(length uint64, nextIndex uint64, countryCode string, highwayID string) *bot.InlineKeyboardMarkup {
+	if length <= nextIndex {
 		return nil
 	}
 

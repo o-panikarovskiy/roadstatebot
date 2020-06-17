@@ -23,7 +23,6 @@ func (inst *botStruct) Run() {
 		}
 
 		if update.Message != nil {
-			logMessage(update.Message)
 			go inst.fire(update)
 		}
 	}

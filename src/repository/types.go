@@ -30,7 +30,6 @@ type Feedback struct {
 // IRepository interface
 type IRepository interface {
 	GetCountiesList() ([]Country, error)
-	GetHighWayTypesList(countryCode string) ([]HighWayType, error)
 	GetHighwaysList(countryCode string, highwayTypeID string) ([]HighWay, error)
 	GetFeedbacksList(countryCode string, highwayTypeID string) ([]Feedback, error)
 }

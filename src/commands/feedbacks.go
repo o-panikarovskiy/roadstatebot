@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-// Feedback command
-func Feedback(rep repository.IRepository) bot.Handler {
+// FeedbacksList command
+func FeedbacksList(rep repository.IRepository) bot.Handler {
 	return func(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 		countryCode, highwayID := parseHighwayID(msg.Text)
 

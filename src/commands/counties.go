@@ -5,8 +5,8 @@ import (
 	"roadstatebot/src/repository"
 )
 
-// Counties command
-func Counties(rep repository.IRepository) bot.Handler {
+// CountriesList command
+func CountriesList(rep repository.IRepository) bot.Handler {
 	return func(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 		list, err := rep.GetCountiesList()
 

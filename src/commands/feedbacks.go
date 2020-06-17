@@ -14,7 +14,8 @@ func FeedbacksList(rep repository.IRepository) bot.Handler {
 		countryCode, highwayID := parseHighwayID(msg.Text)
 
 		list, err := rep.GetFeedbacksList(countryCode, highwayID)
-		if err != nil || len(list) == 0 {
+		ulen := uint64(len(list))
+		if err != nil || ulen == 0 {
 			return nil
 		}
 
@@ -22,7 +23,7 @@ func FeedbacksList(rep repository.IRepository) bot.Handler {
 
 		return &bot.Message{
 			Text:        res,
-			ReplyMarkup: formatReplyMarkup(len(list), 1, countryCode, highwayID),
+			ReplyMarkup: formatFeedbackReplyMarkup(ulen, 1, countryCode, highwayID),
 		}
 	}
 }
@@ -49,12 +50,12 @@ func FeedbackAnswer(rep repository.IRepository) bot.AnswerHandler {
 
 		return &bot.Message{
 			Text:        res,
-			ReplyMarkup: formatReplyMarkup(len(list), int(index+1), countryCode, highwayID),
+			ReplyMarkup: formatFeedbackReplyMarkup(ulen, index+1, countryCode, highwayID),
 		}
 	}
 }
 
-func formatReplyMarkup(maxLen int, nextIndex int, countryCode string, highwayID string) *bot.InlineKeyboardMarkup {
+func formatFeedbackReplyMarkup(maxLen uint64, nextIndex uint64, countryCode string, highwayID string) *bot.InlineKeyboardMarkup {
 	if maxLen <= nextIndex {
 		return nil
 	}

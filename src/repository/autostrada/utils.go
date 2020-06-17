@@ -11,7 +11,7 @@ func parseHighwayID(href string, ok bool) string {
 	}
 
 	paths := strings.Split(href, "/")
-	return paths[len(paths)-1]
+	return strings.ToUpper(paths[len(paths)-1])
 }
 
 func parseHighwayRating(text string) float64 {

@@ -17,8 +17,8 @@ func Init(ibot bot.IBot, cfg *config.AppConfig, rep repository.IRepository) {
 
 	ibot.On("/list", CountriesList(rep))
 	ibot.On("/list@"+botName, CountriesList(rep))
-	ibot.OnAnswer("/list", CountiesAnswer(rep))
-	ibot.OnAnswer("/highway", HighwayTypeAnswer(rep))
+	ibot.OnAnswer("/list", CountiesListAnswer(rep))
+	ibot.OnAnswer("/highways", HighwayListAnswer(rep))
 
 	regHighway, _ := regexp.Compile(`(?i)^/(ua|ru|by|uа)([MPAHМРАН])[0-9]+$`)
 	ibot.OnRegexp(regHighway, FeedbacksList(rep))

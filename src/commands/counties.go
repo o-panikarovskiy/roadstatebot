@@ -35,8 +35,8 @@ func CountriesList(rep repository.IRepository) bot.Handler {
 	}
 }
 
-// CountiesAnswer command
-func CountiesAnswer(rep repository.IRepository) bot.AnswerHandler {
+// CountiesListAnswer command
+func CountiesListAnswer(rep repository.IRepository) bot.AnswerHandler {
 	return func(countryCode string) *bot.Message {
 		list, err := rep.GetHighWayTypesList(countryCode)
 
@@ -49,7 +49,7 @@ func CountiesAnswer(rep repository.IRepository) bot.AnswerHandler {
 			row := []bot.InlineKeyboardButton{
 				{
 					Text:         hwType.Name,
-					CallbackData: "/highway:" + countryCode + "|" + hwType.ID + "|" + hwType.Name,
+					CallbackData: "/highways:" + countryCode + "|" + hwType.ID + "|0|50",
 				},
 			}
 

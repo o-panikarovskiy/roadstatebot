@@ -91,15 +91,15 @@ func parseHighwayID(text string) (string, string) {
 func formatFeedback(feedback *repository.Feedback) string {
 	res := ""
 	if feedback.Rating != 0 {
-		res += fmt.Sprintf("Ретинг: %.1f \n", feedback.Rating)
+		res += fmt.Sprintf("*Ретинг:* %.1f\n", feedback.Rating)
 	}
 	if feedback.Date != "" {
-		res += fmt.Sprintf("Дата: %s \n", feedback.Date)
+		res += fmt.Sprintf("*Дата:* %s\n", feedback.Date)
 	}
 	if feedback.RoadPart != "" {
-		res += fmt.Sprintf("Участок: %s \n", feedback.RoadPart)
+		res += fmt.Sprintf("*Участок:* %s\n", feedback.RoadPart)
 	}
-	res += feedback.Text
+	res += "\n" + feedback.Text
 
 	return res
 }

@@ -22,6 +22,7 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 	}
 
 	tgMessage := tgbotapi.NewMessage(update.Message.Chat.ID, message.Text)
+	tgMessage.ParseMode = "markdown"
 
 	if !update.Message.Chat.IsPrivate() {
 		tgMessage.ReplyToMessageID = update.Message.MessageID
@@ -47,6 +48,7 @@ func (inst *botStruct) fireAnswer(update tgbotapi.Update) {
 	}
 
 	tgMessage := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, message.Text)
+	tgMessage.ParseMode = "markdown"
 
 	if message.ReplyMarkup != nil {
 		tgMessage.ReplyMarkup = inst.toTgInlineKeyboardMarkup(message.ReplyMarkup)

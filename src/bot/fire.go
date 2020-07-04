@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"fmt"
+	"net/url"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -18,6 +20,20 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 
 	message := handler(user, chat, msg)
 	if message == nil {
+		return
+	}
+
+	if message.PhotoURL != "" {
+		params := url.Values{}
+		params.Add("chat_id", fmt.Sprint(update.Message.Chat.ID))
+		params.Add("photo", message.PhotoURL)
+		inst.api.MakeRequest("sendPhoto", params)
+		return
+	}
+
+	if message.File != nil {
+		tgPhotoMsg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, inst.toTgFile(message.File))
+		inst.api.Send(tgPhotoMsg)
 		return
 	}
 
@@ -55,4 +71,5 @@ func (inst *botStruct) fireAnswer(update tgbotapi.Update) {
 	}
 
 	inst.api.Send(tgMessage)
+
 }

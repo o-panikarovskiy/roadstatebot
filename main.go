@@ -12,13 +12,13 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		log.Fatal("Please, specify the config file")
+		log.Println("Please, specify the config file")
 		return
 	}
 
 	path, err := filepath.Abs(os.Args[1])
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 

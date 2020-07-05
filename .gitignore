@@ -45,4 +45,5 @@ Thumbs.db
 .dev.json
 .prod.json
 .test.json
+deploy.sh
 

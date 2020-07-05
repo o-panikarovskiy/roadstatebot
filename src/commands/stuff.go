@@ -65,10 +65,6 @@ func initStuff(ibot bot.IBot) {
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^(антон|тоха|виталий|веталь|витаха|олег|олежа)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		return &bot.Message{Text: "ты красавчик"}
 	})
-
-	ibot.OnRegexp(regexp.MustCompile(`(?i)^test$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
-		panic("TEST")
-	})
 }
 
 func getRandValueInArr(arr []string) string {

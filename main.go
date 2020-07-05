@@ -1,40 +1,5 @@
 package main
 
-// import (
-// 	"log"
-
-// 	"github.com/go-telegram-bot-api/telegram-bot-api"
-// )
-
-// func main() {
-// 	bot, err := tgbotapi.NewBotAPI("MyAwesomeBotToken")
-// 	if err != nil {
-// 		log.Panic(err)
-// 	}
-
-// 	bot.Debug = true
-
-// 	log.Printf("Authorized on account %s", bot.Self.UserName)
-
-// 	u := tgbotapi.NewUpdate(0)
-// 	u.Timeout = 60
-
-// 	updates, err := bot.GetUpdatesChan(u)
-
-// 	for update := range updates {
-// 		if update.Message == nil { // ignore any non-Message Updates
-// 			continue
-// 		}
-
-// 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-// 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-// 		msg.ReplyToMessageID = update.Message.MessageID
-
-// 		bot.Send(msg)
-// 	}
-// }
-
 import (
 	"log"
 	"os"
@@ -46,7 +11,18 @@ import (
 )
 
 func main() {
-	instance := server.NewInstance(setup())
+	if len(os.Args) < 2 {
+		log.Fatal("Please, specify the config file")
+		return
+	}
+
+	path, err := filepath.Abs(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	instance := server.NewInstance(config.NewDefaultConfig(path))
 
 	instance.Run()
 
@@ -56,17 +32,4 @@ func main() {
 
 	instance.Stop()
 	os.Exit(0)
-}
-
-func setup() *config.AppConfig {
-	if len(os.Args) < 2 {
-		log.Panicln("Please, specify the config file")
-	}
-
-	path, err := filepath.Abs(os.Args[1])
-	if err != nil {
-		log.Panicln(err)
-	}
-
-	return config.NewDefaultConfig(path)
 }

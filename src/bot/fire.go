@@ -3,7 +3,6 @@ package bot
 import (
 	"fmt"
 	"net/url"
-	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -23,17 +22,25 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 		return
 	}
 
+	if message.File != nil {
+		tgFileMsg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, inst.toTgFile(message.File))
+		if !update.Message.Chat.IsPrivate() {
+			tgFileMsg.ReplyToMessageID = update.Message.MessageID
+		}
+		inst.api.Send(tgFileMsg)
+		return
+	}
+
 	if message.PhotoURL != "" {
 		params := url.Values{}
 		params.Add("chat_id", fmt.Sprint(update.Message.Chat.ID))
 		params.Add("photo", message.PhotoURL)
-		inst.api.MakeRequest("sendPhoto", params)
-		return
-	}
+		params.Add("caption", message.Text)
+		if !update.Message.Chat.IsPrivate() {
+			params.Add("reply_to_message_id", fmt.Sprint(update.Message.MessageID))
+		}
 
-	if message.File != nil {
-		tgPhotoMsg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, inst.toTgFile(message.File))
-		inst.api.Send(tgPhotoMsg)
+		inst.api.MakeRequest("sendPhoto", params)
 		return
 	}
 
@@ -49,27 +56,4 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 	}
 
 	inst.api.Send(tgMessage)
-}
-
-func (inst *botStruct) fireAnswer(update tgbotapi.Update) {
-	answerData := strings.Split(update.CallbackQuery.Data, ":")
-	handler := inst.findAnswerHandler(answerData[0])
-	if handler == nil {
-		return
-	}
-
-	message := handler(answerData[1])
-	if message == nil {
-		return
-	}
-
-	tgMessage := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, message.Text)
-	tgMessage.ParseMode = "markdown"
-
-	if message.ReplyMarkup != nil {
-		tgMessage.ReplyMarkup = inst.toTgInlineKeyboardMarkup(message.ReplyMarkup)
-	}
-
-	inst.api.Send(tgMessage)
-
 }

@@ -42,12 +42,14 @@ func initStuff(ibot bot.IBot) {
 			"http://risovach.ru/upload/2020/07/mem/toni-stark_244330259_orig_.jpg",
 			"http://risovach.ru/upload/2020/07/mem/zheleznyy-chelovek_244330279_orig_.jpg",
 			"http://risovach.ru/upload/2020/07/mem/chuvak-eto-repchik_244330300_orig_.jpg",
+			"https://pbs.twimg.com/media/EbefYrsWsAAIeFL?format=jpg&name=medium",
+			"https://pbs.twimg.com/media/Ebef4oSXYAAtUWH?format=jpg&name=medium",
 		}
 
 		return &bot.Message{PhotoURL: getRandValueInArr(imgs)}
 	})
 
-	ibot.OnRegexp(regexp.MustCompile(`300`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
+	ibot.OnRegexp(regexp.MustCompile(`(?i)^(300|триста)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		imgs := []string{
 			"https://pbs.twimg.com/media/EcGH3k-XQAABbRQ?format=jpg",
 		}
@@ -56,10 +58,14 @@ func initStuff(ibot bot.IBot) {
 	})
 
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^нет$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
-		return &bot.Message{Text: "пидара ответ!"}
+		return &bot.Message{Text: "пидара ответ"}
 	})
 
-	ibot.OnRegexp(regexp.MustCompile(`(?i)^(макс|максим|максимка|антон|тоха|виталий|веталь|витаха|олег|олежа)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
+	ibot.OnRegexp(regexp.MustCompile(`(?i)^(макс|максим|максимка)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
+		return &bot.Message{Text: "ты плоечку купил?"}
+	})
+
+	ibot.OnRegexp(regexp.MustCompile(`(?i)^(антон|тоха|виталий|веталь|витаха|олег|олежа)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		return &bot.Message{Text: "ты красавчик"}
 	})
 }

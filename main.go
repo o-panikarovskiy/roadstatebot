@@ -25,6 +25,14 @@ func main() {
 	instance := server.NewInstance(config.NewDefaultConfig(path))
 	instance.Run()
 
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println(r)
+			instance.Stop()
+			instance.Run()
+		}
+	}()
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt) // SIGINT (Ctrl+C)
 	<-c                            // Block until we receive our signal.

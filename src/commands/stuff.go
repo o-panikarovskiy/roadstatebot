@@ -24,6 +24,9 @@ func initStuff(ibot bot.IBot) {
 			"http://risovach.ru/upload/2020/07/mem/chuvak-eto-repchik_244330300_orig_.jpg",
 			"https://pbs.twimg.com/media/EbefYrsWsAAIeFL?format=jpg&name=medium",
 			"https://pbs.twimg.com/media/Ebef4oSXYAAtUWH?format=jpg&name=medium",
+			"http://risovach.ru/upload/2020/07/mem/hitriy-getsbi_244363555_orig_.jpg",
+			"http://risovach.ru/upload/2020/07/mem/v-mire-grustit-odin-kotik_244363635_orig_.jpg",
+			"http://risovach.ru/upload/2020/07/mem/velikiy-getsbi-bokal-za-teh_244363697_orig_.jpg",
 		}
 
 		return &bot.Message{PhotoURL: getRandValueInArr(imgs)}

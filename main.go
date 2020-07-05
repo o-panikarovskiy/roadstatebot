@@ -23,7 +23,7 @@ func main() {
 	}
 
 	instance := server.NewInstance(config.NewDefaultConfig(path))
-	go instance.Run()
+	instance.Run()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt) // SIGINT (Ctrl+C)

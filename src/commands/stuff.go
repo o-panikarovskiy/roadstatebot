@@ -39,6 +39,7 @@ func initStuff(ibot bot.IBot) {
 			"https://www.meme-arsenal.com/memes/f14353ecdbc9ada0d08cb4c0f98f6083.jpg",
 			"https://www.meme-arsenal.com/memes/8de3bb6fabaa7b86146bde0397f618f7.jpg",
 			"https://www.meme-arsenal.com/memes/f446a4b4c17a220a128de1cd7153c03b.jpg",
+			"http://risovach.ru/upload/2020/07/mem/pafosnyy-smeh_244365583_orig_.jpg",
 		}
 
 		return &bot.Message{PhotoURL: getRandValueInArr(imgs)}
@@ -49,6 +50,9 @@ func initStuff(ibot bot.IBot) {
 			"https://www.meme-arsenal.com/memes/8d030eb87804939de063b97cb0ec5439.jpg",
 			"https://www.meme-arsenal.com/memes/dffd4b48d57fd0b2b95aa3aa240cbea8.jpg",
 			"https://www.meme-arsenal.com/memes/2f3066597c524b2aa6f6a8e36ebd0b7b.jpg",
+			"http://risovach.ru/upload/2020/07/mem/frodo_244365435_orig_.png",
+			"http://risovach.ru/upload/2020/07/mem/tipichnyy-gey_244365637_orig_.jpg",
+			"http://risovach.ru/upload/2020/07/mem/gei_244365798_orig_.jpg",
 		}
 
 		return &bot.Message{PhotoURL: getRandValueInArr(imgs)}

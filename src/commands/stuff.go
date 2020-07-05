@@ -35,13 +35,23 @@ func initStuff(ibot bot.IBot) {
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^(300|триста)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		imgs := []string{
 			"https://pbs.twimg.com/media/EcGH3k-XQAABbRQ?format=jpg",
+			"https://www.meme-arsenal.com/memes/0e0fb895ce30bc291f39a928d5d9ff6c.jpg",
+			"https://www.meme-arsenal.com/memes/f14353ecdbc9ada0d08cb4c0f98f6083.jpg",
+			"https://www.meme-arsenal.com/memes/8de3bb6fabaa7b86146bde0397f618f7.jpg",
+			"https://www.meme-arsenal.com/memes/f446a4b4c17a220a128de1cd7153c03b.jpg",
 		}
 
 		return &bot.Message{PhotoURL: getRandValueInArr(imgs)}
 	})
 
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^нет$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
-		return &bot.Message{Text: "пидара ответ"}
+		imgs := []string{
+			"https://www.meme-arsenal.com/memes/8d030eb87804939de063b97cb0ec5439.jpg",
+			"https://www.meme-arsenal.com/memes/dffd4b48d57fd0b2b95aa3aa240cbea8.jpg",
+			"https://www.meme-arsenal.com/memes/2f3066597c524b2aa6f6a8e36ebd0b7b.jpg",
+		}
+
+		return &bot.Message{PhotoURL: getRandValueInArr(imgs)}
 	})
 
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^(макс|максим|максимка)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {

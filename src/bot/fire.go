@@ -2,7 +2,6 @@ package bot
 
 import (
 	"fmt"
-	"net/url"
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -29,38 +28,21 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 		return
 	}
 
+	chatID := update.Message.Chat.ID
+	replyID := update.Message.MessageID
+	if update.Message.Chat.IsPrivate() {
+		replyID = 0
+	}
+
 	if message.File != nil {
-		tgFileMsg := tgbotapi.NewPhotoUpload(update.Message.Chat.ID, inst.toTgFile(message.File))
-		if !update.Message.Chat.IsPrivate() {
-			tgFileMsg.ReplyToMessageID = update.Message.MessageID
-		}
-		inst.api.Send(tgFileMsg)
+		inst.sendFile(chatID, message, replyID)
 		return
 	}
 
 	if message.PhotoURL != "" {
-		params := url.Values{}
-		params.Add("chat_id", fmt.Sprint(update.Message.Chat.ID))
-		params.Add("photo", message.PhotoURL)
-		params.Add("caption", message.Text)
-		if !update.Message.Chat.IsPrivate() {
-			params.Add("reply_to_message_id", fmt.Sprint(update.Message.MessageID))
-		}
-
-		inst.api.MakeRequest("sendPhoto", params)
+		inst.sendPhotoURL(chatID, message, replyID)
 		return
 	}
 
-	tgMessage := tgbotapi.NewMessage(update.Message.Chat.ID, message.Text)
-	tgMessage.ParseMode = "markdown"
-
-	if !update.Message.Chat.IsPrivate() {
-		tgMessage.ReplyToMessageID = update.Message.MessageID
-	}
-
-	if message.ReplyMarkup != nil {
-		tgMessage.ReplyMarkup = inst.toTgInlineKeyboardMarkup(message.ReplyMarkup)
-	}
-
-	inst.api.Send(tgMessage)
+	inst.sendText(chatID, message, replyID)
 }

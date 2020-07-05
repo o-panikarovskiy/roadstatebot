@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	log.SetOutput(os.Stdout)
+
 	if len(os.Args) < 2 {
 		log.Println("Please, specify the config file")
 		return

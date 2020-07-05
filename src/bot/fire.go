@@ -3,11 +3,18 @@ package bot
 import (
 	"fmt"
 	"net/url"
+	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 func (inst *botStruct) fire(update tgbotapi.Update) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Fprintln(os.Stderr, r)
+		}
+	}()
+
 	handler := inst.findHandler(update.Message.Text)
 	if handler == nil {
 		return

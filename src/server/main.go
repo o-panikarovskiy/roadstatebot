@@ -23,10 +23,10 @@ func NewInstance(cfg *config.AppConfig) *Instance {
 // Run instanse
 func (inst *Instance) Run() {
 	inst.bot.Run()
-	log.Print("Telegram bot started")
+	log.Println("Telegram bot started")
 }
 
 // Stop instanse
 func (inst *Instance) Stop() {
-	log.Print("Telegram bot stopped")
+	log.Println("Telegram bot stopped")
 }

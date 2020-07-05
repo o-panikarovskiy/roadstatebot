@@ -47,6 +47,14 @@ func (inst *botStruct) toMessage(from *tgbotapi.Message) *Message {
 	}
 }
 
+func (inst *botStruct) toTgFile(from *FileReader) *tgbotapi.FileReader {
+	return &tgbotapi.FileReader{
+		Name:   from.Name,
+		Reader: from.Reader,
+		Size:   from.Size,
+	}
+}
+
 func (inst *botStruct) toTgInlineKeyboardMarkup(from *InlineKeyboardMarkup) *tgbotapi.InlineKeyboardMarkup {
 	var rows [][]tgbotapi.InlineKeyboardButton
 

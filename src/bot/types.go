@@ -1,6 +1,9 @@
 package bot
 
-import "regexp"
+import (
+	"io"
+	"regexp"
+)
 
 // User is a user on Telegram.
 type User struct {
@@ -32,11 +35,20 @@ type Chat struct {
 	InviteLink          string     `json:"invite_link,omitempty"` // optional
 }
 
+// FileReader struct
+type FileReader struct {
+	Name   string
+	Reader io.Reader
+	Size   int64
+}
+
 // Message struct
 type Message struct {
-	MessageID   int    `json:"message_id"`
-	Date        int    `json:"date"`
-	Text        string `json:"text"`
+	MessageID   int         `json:"message_id"`
+	Date        int         `json:"date"`
+	Text        string      `json:"text"`
+	PhotoURL    string      `json:"-"`
+	File        *FileReader `json:"-"`
 	ReplyMarkup *InlineKeyboardMarkup
 }
 

@@ -1,10 +1,17 @@
 package commands
 
 import (
+	"bytes"
 	"crypto/rand"
+	"encoding/json"
+	"io/ioutil"
+	"log"
 	"math/big"
+	"net/http"
 	"regexp"
 	"roadstatebot/src/bot"
+	"strings"
+	"unicode/utf8"
 )
 
 func initStuff(ibot bot.IBot) {
@@ -65,6 +72,37 @@ func initStuff(ibot bot.IBot) {
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^(антон|тоха|виталий|веталь|витаха|олег|олежа)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		return &bot.Message{Text: "ты красавчик"}
 	})
+
+	ibot.OnRegexp(regexp.MustCompile("^!"), func(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
+		errorText := "не знаю что тут сказать..."
+
+		text := strings.TrimSpace(trimFirstRune(msg.Text))
+		req := map[string]string{"uid": "", "bot": "kristina", "text": text}
+
+		jsonValue, _ := json.Marshal(req)
+		resp, err := http.Post("https://xu.su/api/send", "application/json", bytes.NewBuffer(jsonValue))
+		if err != nil || resp.StatusCode != 200 {
+			log.Printf("kristina response error: %v - %v \n", resp.StatusCode, err)
+			return &bot.Message{Text: errorText}
+		}
+
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("kristina read body error:  %v \n", err)
+			return &bot.Message{Text: errorText}
+		}
+
+		respJSON := make(map[string]interface{})
+		err = json.Unmarshal(body, &respJSON)
+		if err != nil {
+			log.Printf("kristina parse json error:  %v \n", err)
+			return &bot.Message{Text: errorText}
+		}
+
+		return &bot.Message{Text: respJSON["text"].(string)}
+
+	})
 }
 
 func getRandValueInArr(arr []string) string {
@@ -78,4 +116,9 @@ func getRandValueInArr(arr []string) string {
 	}
 
 	return arr[idx]
+}
+
+func trimFirstRune(s string) string {
+	_, i := utf8.DecodeRuneInString(s)
+	return s[i:]
 }

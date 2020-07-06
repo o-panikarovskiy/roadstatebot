@@ -81,9 +81,12 @@ func initStuff(ibot bot.IBot) {
 	})
 
 	ibot.OnRegexp(regexp.MustCompile("^!"), func(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
-		errorText := "не знаю что тут сказать..."
 		text := strings.TrimSpace(trimFirstRune(msg.Text))
+		if text == "" {
+			return &bot.Message{Text: "Для начала диалога используй восклицательный знак в начале.\nНапример так:\n! привет!"}
+		}
 
+		errorText := "не знаю что тут сказать..."
 		req := url.Values{
 			"query": {fmt.Sprintf(`{"ask": "%s","key":"","userid":"%v"}`, text, chat.ID)},
 		}
@@ -109,7 +112,7 @@ func initStuff(ibot bot.IBot) {
 		}
 
 		if answer.Status != 1 {
-			log.Printf("anfisa parse json error:  %s \n", answer.Description)
+			log.Printf("anfisa status error:  %s \n", answer.Description)
 			return &bot.Message{Text: errorText}
 		}
 

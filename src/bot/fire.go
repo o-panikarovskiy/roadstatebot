@@ -15,7 +15,9 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 		}
 	}()
 
-	log.Printf("[%s %s]:%s", update.Message.From.FirstName, update.Message.From.LastName, update.Message.Text)
+	if update.Message.Chat.IsPrivate() {
+		log.Printf("[%s %s]:%s", update.Message.From.FirstName, update.Message.From.LastName, update.Message.Text)
+	}
 
 	handler := inst.findHandler(update.Message.Text)
 	if handler == nil {

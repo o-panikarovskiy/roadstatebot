@@ -24,6 +24,8 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 	chat := inst.toChat(update.Message.Chat)
 	user := inst.toUser(update.Message.From)
 
+	log.Printf("[%s %s]:%s", user.FirstName, user.LastName, msg.Text)
+
 	message := handler(user, chat, msg)
 	if message == nil {
 		return
@@ -33,7 +35,6 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 	replyID := update.Message.MessageID
 	if update.Message.Chat.IsPrivate() {
 		replyID = 0
-		log.Printf("[%s %s]:%s", user.FirstName, user.LastName, msg.Text)
 	}
 
 	if message.File != nil {

@@ -2,6 +2,7 @@ package bot
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -22,6 +23,8 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 	msg := inst.toMessage(update.Message)
 	chat := inst.toChat(update.Message.Chat)
 	user := inst.toUser(update.Message.From)
+
+	log.Printf("[%s %s]:%s", user.FirstName, user.LastName, msg.Text)
 
 	message := handler(user, chat, msg)
 	if message == nil {

@@ -83,7 +83,7 @@ func initStuff(ibot bot.IBot) {
 	ibot.OnRegexp(regexp.MustCompile("^!"), func(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 		text := strings.TrimSpace(trimFirstRune(msg.Text))
 		if text == "" {
-			return &bot.Message{Text: "Для начала диалога используй восклицательный знак в начале.\nНапример так:\n! привет!"}
+			return &bot.Message{Text: "Для начала диалога используй восклицательный знак.\nНапример так:\n! привет!"}
 		}
 
 		errorText := "Я не знаю что тут сказать..."

@@ -86,7 +86,7 @@ func initStuff(ibot bot.IBot) {
 			return &bot.Message{Text: "Для начала диалога используй восклицательный знак в начале.\nНапример так:\n! привет!"}
 		}
 
-		errorText := "не знаю что тут сказать..."
+		errorText := "Я не знаю что тут сказать..."
 		req := url.Values{
 			"query": {fmt.Sprintf(`{"ask": "%s","key":"","userid":"%v"}`, text, chat.ID)},
 		}

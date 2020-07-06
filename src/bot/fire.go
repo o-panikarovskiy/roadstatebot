@@ -15,6 +15,8 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 		}
 	}()
 
+	log.Printf("[%s %s]:%s", update.Message.From.FirstName, update.Message.From.LastName, update.Message.Text)
+
 	handler := inst.findHandler(update.Message.Text)
 	if handler == nil {
 		return
@@ -23,8 +25,6 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 	msg := inst.toMessage(update.Message)
 	chat := inst.toChat(update.Message.Chat)
 	user := inst.toUser(update.Message.From)
-
-	log.Printf("[%s %s]:%s", user.FirstName, user.LastName, msg.Text)
 
 	message := handler(user, chat, msg)
 	if message == nil {

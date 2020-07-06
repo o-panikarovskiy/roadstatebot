@@ -22,6 +22,4 @@ func Init(ibot bot.IBot, rep repository.IRepository) {
 	ibot.OnAnswer("/feedback", FeedbackAnswer(rep))
 
 	ibot.OnRegexp(regexp.MustCompile("^!"), AnfisaChat)
-
-	initStuff(ibot)
 }

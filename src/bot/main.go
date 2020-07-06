@@ -2,7 +2,6 @@ package bot
 
 import (
 	"regexp"
-	"roadstatebot/src/config"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -15,8 +14,8 @@ type botStruct struct {
 }
 
 // New create new instanse of IBot
-func New(cfg *config.AppConfig) (IBot, error) {
-	bot, err := tgbotapi.NewBotAPI(cfg.TelegramToken)
+func New(apiKey string) (IBot, error) {
+	bot, err := tgbotapi.NewBotAPI(apiKey)
 
 	inst := &botStruct{
 		api:      bot,

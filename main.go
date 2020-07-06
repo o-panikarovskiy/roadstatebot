@@ -4,26 +4,18 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"path/filepath"
 
-	"roadstatebot/src/config"
 	"roadstatebot/src/server"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Println("Please, specify the config file")
+	botAPIKey := os.Getenv("TG_BOT_KEY")
+	if botAPIKey == "" {
+		log.Println("Please, specify TG_BOT_KEY")
 		return
 	}
 
-	path, err := filepath.Abs(os.Args[1])
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	instance := server.NewInstance(config.NewDefaultConfig(path))
-
+	instance := server.NewInstance(botAPIKey)
 	instance.Run()
 
 	c := make(chan os.Signal, 1)

@@ -44,5 +44,9 @@ func (inst *botStruct) fire(update tgbotapi.Update) {
 		return
 	}
 
-	inst.sendText(chatID, message, replyID)
+	if message.Text != "" {
+		inst.sendText(chatID, message, replyID)
+		return
+	}
+
 }

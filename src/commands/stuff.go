@@ -1,25 +1,9 @@
 package commands
 
 import (
-	"crypto/rand"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"math/big"
-	"net/http"
-	"net/url"
 	"regexp"
 	"roadstatebot/src/bot"
-	"strings"
-	"unicode/utf8"
 )
-
-type anfisaAnswer struct {
-	Status      int    `json:"status"`
-	Aiml        string `json:"aiml"`
-	Description string `json:"description"`
-}
 
 func initStuff(ibot bot.IBot) {
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^да$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
@@ -79,62 +63,4 @@ func initStuff(ibot bot.IBot) {
 	ibot.OnRegexp(regexp.MustCompile(`(?i)^(антон|тоха|виталий|веталь|витаха|олег|олежа)$`), func(*bot.User, *bot.Chat, *bot.Message) *bot.Message {
 		return &bot.Message{Text: "ты красавчик"}
 	})
-
-	ibot.OnRegexp(regexp.MustCompile("^!"), func(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
-		text := strings.TrimSpace(trimFirstRune(msg.Text))
-		if text == "" {
-			return &bot.Message{Text: "Для начала диалога используй восклицательный знак.\nНапример так:\n! привет!"}
-		}
-
-		errorText := "Я не знаю что тут сказать..."
-		req := url.Values{
-			"query": {fmt.Sprintf(`{"ask": "%s","key":"","userid":"%v"}`, text, chat.ID)},
-		}
-
-		resp, err := http.PostForm("https://aiproject.ru/api/", req)
-		if err != nil || resp.StatusCode != 200 {
-			log.Printf("anfisa response error: %v - %v \n", resp.StatusCode, err)
-			return &bot.Message{Text: errorText}
-		}
-
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Printf("anfisa read body error:  %v \n", err)
-			return &bot.Message{Text: errorText}
-		}
-
-		answer := anfisaAnswer{}
-		err = json.Unmarshal(body, &answer)
-		if err != nil {
-			log.Printf("anfisa parse json error:  %v \n", err)
-			return &bot.Message{Text: errorText}
-		}
-
-		if answer.Status != 1 {
-			log.Printf("anfisa status error:  %s \n", answer.Description)
-			return &bot.Message{Text: errorText}
-		}
-
-		return &bot.Message{Text: answer.Aiml}
-
-	})
-}
-
-func getRandValueInArr(arr []string) string {
-	index, err := rand.Int(rand.Reader, big.NewInt(int64(len(arr))))
-
-	var idx int64
-	if err == nil {
-		idx = index.Int64()
-	} else {
-		idx = 0
-	}
-
-	return arr[idx]
-}
-
-func trimFirstRune(s string) string {
-	_, i := utf8.DecodeRuneInString(s)
-	return s[i:]
 }

@@ -3,21 +3,16 @@ package server
 import (
 	"log"
 	"roadstatebot/src/bot"
-	"roadstatebot/src/config"
 )
 
 // Instance server
 type Instance struct {
 	bot bot.IBot
-	cfg *config.AppConfig
 }
 
 // NewInstance create new Instance
-func NewInstance(cfg *config.AppConfig) *Instance {
-	if cfg.IsDev() {
-		return createDevInstase(cfg)
-	}
-	return nil
+func NewInstance(apiKey string) *Instance {
+	return createDevInstase(apiKey)
 }
 
 // Run instanse

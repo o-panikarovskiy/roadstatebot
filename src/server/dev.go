@@ -4,22 +4,18 @@ import (
 	"log"
 	"roadstatebot/src/bot"
 	"roadstatebot/src/commands"
-	"roadstatebot/src/config"
 	"roadstatebot/src/repository/autostrada"
 )
 
-func createDevInstase(cfg *config.AppConfig) *Instance {
-	ibot, err := bot.New(cfg)
+func createDevInstase(apiKey string) *Instance {
+	ibot, err := bot.New(apiKey)
 
 	if err != nil {
 		log.Panic(err)
 	}
 
 	log.Printf("Authorized on account %s", ibot.BotName())
-	commands.Init(ibot, cfg, autostrada.New())
+	commands.Init(ibot, autostrada.New())
 
-	return &Instance{
-		bot: ibot,
-		cfg: cfg,
-	}
+	return &Instance{bot: ibot}
 }

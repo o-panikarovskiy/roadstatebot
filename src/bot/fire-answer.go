@@ -22,7 +22,7 @@ func (inst *botStruct) fireAnswer(update tgbotapi.Update) {
 	}
 
 	message := handler(answerData[1])
-	if message == nil {
+	if message == nil || message.Text == "" {
 		return
 	}
 

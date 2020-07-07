@@ -18,7 +18,8 @@ type anfisaAnswer struct {
 }
 
 const anfisaHelp = "Для начала диалога используй восклицательный знак.\nНапример так:\n! привет!"
-const anfisaError = "😴"
+
+var anfisaError = []string{"🙄", "😴", "🙄", "😊"}
 
 // AnfisaChat func
 func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
@@ -34,7 +35,7 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 	resp, err := http.PostForm("https://aiproject.ru/api/", req)
 	if err != nil || resp.StatusCode != 200 {
 		log.Printf("anfisa http error: %v - %v", resp.StatusCode, err)
-		return &bot.Message{Text: anfisaError}
+		return &bot.Message{Text: getRandValueInArr(anfisaError)}
 	}
 
 	defer resp.Body.Close()
@@ -51,7 +52,7 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 
 	if answer.Status != 1 {
 		log.Printf("anfisa status error: %s", string(body))
-		return &bot.Message{Text: anfisaError}
+		return &bot.Message{Text: getRandValueInArr(anfisaError)}
 	}
 
 	return &bot.Message{Text: answer.Aiml}

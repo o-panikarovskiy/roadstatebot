@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"roadstatebot/src/bot"
@@ -32,6 +33,7 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 
 	resp, err := http.PostForm("https://aiproject.ru/api/", req)
 	if err != nil || resp.StatusCode != 200 {
+		log.Printf("anfisa http error: %v - %v", resp.StatusCode, err)
 		return &bot.Message{Text: anfisaError}
 	}
 
@@ -48,7 +50,8 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 	}
 
 	if answer.Status != 1 {
-		return &bot.Message{Text: answer.Description}
+		log.Printf("anfisa status error: %s", string(body))
+		return &bot.Message{Text: anfisaError}
 	}
 
 	return &bot.Message{Text: answer.Aiml}

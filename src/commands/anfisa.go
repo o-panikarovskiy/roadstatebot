@@ -16,6 +16,7 @@ type anfisaAnswer struct {
 	Aiml        string `json:"aiml"`
 	Description string `json:"description"`
 	Emotion     string `json:"emotion"`
+	URL         string `json:"url"`
 }
 
 const anfisaHelp = "Для начала диалога используй восклицательный знак.\nНапример так:\n! привет!"
@@ -58,5 +59,8 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 
 	log.Println(string(body))
 
-	return &bot.Message{Text: strings.TrimSpace(fmt.Sprintf("%s %s", answer.Aiml, answer.Emotion))}
+	return &bot.Message{
+		Text:     strings.TrimSpace(fmt.Sprintf("%s %s", answer.Aiml, answer.Emotion)),
+		PhotoURL: answer.URL,
+	}
 }

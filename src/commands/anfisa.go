@@ -18,7 +18,7 @@ type anfisaAnswer struct {
 }
 
 const anfisaHelp = "Для начала диалога используй восклицательный знак.\nНапример так:\n! привет!"
-const anfisaError = "Я не знаю что тут сказать..."
+const anfisaError = "😴"
 
 // AnfisaChat func
 func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {

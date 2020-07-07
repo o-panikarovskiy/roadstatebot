@@ -48,7 +48,7 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 	}
 
 	if answer.Status != 1 {
-		return &bot.Message{Text: anfisaError}
+		return &bot.Message{Text: answer.Description}
 	}
 
 	return &bot.Message{Text: answer.Aiml}

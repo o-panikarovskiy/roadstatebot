@@ -58,15 +58,8 @@ func AnfisaChat(user *bot.User, chat *bot.Chat, msg *bot.Message) *bot.Message {
 		return &bot.Message{Text: getRandValueInArr(anfisaError)}
 	}
 
-	if answer.Action != "" {
-		log.Panicln(answer.Action)
-	}
-	if answer.Emotion != "" {
-		log.Panicln(answer.Emotion)
-	}
-
 	return &bot.Message{
-		Text:     strings.TrimSpace(fmt.Sprintf("%s %s", answer.Aiml, answer.Emotion)),
+		Text:     answer.Aiml,
 		PhotoURL: answer.URL,
 	}
 }
